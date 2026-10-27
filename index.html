@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora da Graziela — Mercado Livre</title>
+
+<style>
+  :root {
+    --yellow: #FFE033;
+    --yellow-dim: #D4B800;
+    --bg: #0f0f0f;
+    --bg2: #191919;
+    --bg3: #222222;
+    --border: #2e2e2e;
+    --border-light: #3a3a3a;
+    --text: #f0f0f0;
+    --text-muted: #888;
+    --text-dim: #555;
+    --green: #3ecf8e;
+    --green-dim: #1a5e3f;
+    --red: #f66;
+    --red-dim: #5e1a1a;
+    --blue: #4fa3ff;
+    --orange: #ff9533;
+    --radius: 12px;
+    --radius-sm: 8px;
+
+    /* Petina brand */
+    --petina-teal: #0d3b3e;
+    --petina-teal-light: #13585c;
+    --petina-blue: #0b3d63;
+    --petina-green: #2ecf9a;
+    --petina-gradient: linear-gradient(120deg, var(--petina-teal) 0%, var(--petina-blue) 100%);
+    --petina-gradient-footer: linear-gradient(90deg, var(--petina-teal) 0%, var(--petina-green) 100%);
+    --petina-badge-gradient: linear-gradient(135deg, var(--petina-green) 0%, var(--petina-teal-light) 100%);
+  }
+
+  html[data-theme="light"] {
+    --bg: #f4f5f6;
+    --bg2: #ffffff;
+    --bg3: #eef0f2;
+    --border: #e1e3e6;
+    --border-light: #cfd3d7;
+    --text: #1c1e21;
+    --text-muted: #6b7178;
+    --text-dim: #9aa0a6;
+    --green-dim: #d7f3e6;
+    --red-dim: #ffe1e1;
+  }
+  body { transition: background-color .2s ease, color .2s ease; }
+  body, .panel, .metric, footer, .petina-topbar, .petina-footer-bar { transition: background-color .2s ease, color .2s ease, border-color .2s ease; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    padding: 32px 24px;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-area { display: flex; align-items: center; gap: 14px; }
+  .logo-badge {
+    background: var(--yellow);
+    color: #0f0f0f;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 6px;
+  }
+  header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -.02em;
+  }
+  header h1 span { color: var(--yellow); }
+  .header-tag {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    border: 1px solid var(--border-light);
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+
+  /* --- INPUTS PANEL --- */
+  .panel {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .panel-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+  .input-group { margin-bottom: 14px; }
+  .input-group label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 600;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+  }
+  .input-group label .badge {
+    font-size: 10px;
+    background: var(--bg3);
+    color: var(--text-dim);
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-family: 'DM Mono', monospace;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .input-wrap {
+    display: flex;
+    align-items: center;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    transition: border-color .15s;
+  }
+  .input-wrap:focus-within { border-color: var(--yellow); }
+  .input-prefix, .input-suffix {
+    padding: 0 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    background: var(--bg3);
+    height: 42px;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .input-suffix { border-right: none; border-left: 1px solid var(--border); }
+  .input-wrap input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0 12px;
+    height: 42px;
+    width: 100%;
+  }
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+  .divider-line {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+  }
+  .subsection-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  /* slider */
+  .slider-group { margin-bottom: 14px; }
+  .slider-group label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-weight: 600;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+  }
+  .slider-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--yellow);
+    font-weight: 500;
+  }
+  input[type=range] {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    outline: none;
+    cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--yellow);
+    cursor: pointer;
+    transition: transform .1s;
+  }
+  input[type=range]::-webkit-slider-thumb:active { transform: scale(1.2); }
+
+  /* --- RESULTS PANEL --- */
+  .results-panel { display: flex; flex-direction: column; gap: 16px; }
+
+  /* frete info */
+  .frete-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .frete-badge .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--blue);
+    flex-shrink: 0;
+  }
+  .frete-badge strong { color: var(--blue); }
+
+  /* comparison grid */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .type-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .type-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .type-name {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .type-card.classico .type-name { color: var(--text); }
+  .type-card.premium .type-name { color: var(--yellow); }
+  .commission-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  .type-card.classico .commission-badge { background: #1e2a1e; color: var(--green); }
+  .type-card.premium .commission-badge { background: #2a220a; color: var(--yellow); }
+
+  .breakdown {
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .brow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+  }
+  .brow .blabel { color: var(--text-muted); }
+  .brow .bval {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+  }
+  .brow.negative .bval { color: var(--red); }
+  .brow.positive .bval { color: var(--green); }
+  .brow-sep {
+    border-top: 1px dashed var(--border-light);
+    margin: 4px 0;
+  }
+  .brow.total .blabel { font-weight: 700; color: var(--text); font-size: 12px; }
+  .brow.total .bval { font-size: 13px; font-weight: 700; }
+
+  /* big result */
+  .result-big {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .result-big-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+  .result-big-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  @media (max-width: 700px) {
+    .result-big-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .metric {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+  }
+  .metric-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .metric-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .metric-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+  }
+  .metric.lucro-cl .metric-val { color: var(--green); }
+  .metric.lucro-pr .metric-val { color: var(--yellow); }
+  .metric.preco-visual .metric-val { color: var(--blue); }
+  .metric.markup .metric-val { color: var(--orange); }
+
+  /* Preço visual section */
+  .visual-section {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .visual-display {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  .price-tag-old {
+    font-family: 'DM Mono', monospace;
+    font-size: 18px;
+    color: var(--text-muted);
+    text-decoration: line-through;
+    opacity: .7;
+  }
+  .price-arrow {
+    font-size: 18px;
+    color: var(--text-dim);
+  }
+  .price-tag-new {
+    font-family: 'DM Mono', monospace;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .discount-pill {
+    background: var(--yellow);
+    color: #0f0f0f;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+  }
+  .price-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 8px;
+  }
+
+  /* frete toggle */
+  .frete-toggle-wrap { display: flex; gap: 4px; }
+  .frete-toggle-btn {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 6px;
+    border: 1px solid var(--border-light);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all .15s;
+    font-family: 'Syne', sans-serif;
+  }
+  .frete-toggle-btn.active {
+    background: var(--blue);
+    color: #0f0f0f;
+    border-color: var(--blue);
+  }
+  .frete-auto-badge {
+    font-size: 11px;
+    color: var(--blue);
+    font-family: 'DM Mono', monospace;
+    background: #0d1e30;
+    border: 1px solid #1a3a5c;
+    border-radius: var(--radius-sm);
+    padding: 9px 12px;
+    margin-top: 0;
+  }
+
+  /* error states */
+  .no-frete {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #2a1a1a;
+    border: 1px solid #5e2020;
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--red);
+  }
+  .warn-frete {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #2a200a;
+    border: 1px solid #5e4010;
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--orange);
+    margin-bottom: 10px;
+  }
+
+  footer {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  /* --- PETINA BRAND STRIP --- */
+  .petina-topbar {
+    background: var(--petina-gradient);
+    border-radius: var(--radius);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .petina-brand { display: flex; align-items: center; gap: 12px; }
+  .petina-icon-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--petina-badge-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.08);
+  }
+  .petina-wordmark {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: .01em;
+    color: #fff;
+  }
+  .petina-wordmark span { color: var(--petina-green); }
+  .petina-subtag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,.65);
+    letter-spacing: .04em;
+  }
+  .petina-topbar-right {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,.55);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  /* --- PETINA FOOTER BAR --- */
+  .petina-footer-bar {
+    background: var(--petina-gradient-footer);
+    border-radius: var(--radius);
+    margin-top: 16px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .petina-footer-bar .doc-confidencial {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .petina-footer-bar .doc-confidencial::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fff;
+    opacity: .8;
+  }
+  .petina-footer-bar .petina-footer-brand {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: .02em;
+  }
+  .petina-footer-bar .petina-footer-dev {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,.7);
+    letter-spacing: .02em;
+  }
+
+  /* --- THEME TOGGLE --- */
+  .theme-toggle-wrap {
+    display: flex;
+    gap: 4px;
+    background: rgba(255,255,255,.08);
+    padding: 3px;
+    border-radius: 8px;
+  }
+  .theme-toggle-btn {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,.6);
+    cursor: pointer;
+    transition: all .15s;
+    font-family: 'Syne', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .theme-toggle-btn.active {
+    background: #fff;
+    color: var(--petina-teal);
+  }
+.results-panel.invalid > :not(#erro){display:none!important}#erro:empty{display:none}.metric-sub{line-height:1.5}
+@media(max-width:650px){body{padding:16px 12px}header,.petina-topbar{flex-wrap:wrap;gap:12px}.petina-topbar-right,.header-tag{display:none}.petina-footer-bar{flex-wrap:wrap;gap:8px}.result-big-grid{grid-template-columns:1fr 1fr}.visual-display{flex-wrap:wrap}input{min-width:0}}
+</style>
+</head>
+<body>
+
+<div class="petina-topbar">
+  <div class="petina-brand">
+    <div class="petina-icon-badge">G</div>
+    <div>
+      <div class="petina-wordmark">Graziela <span>Amorim</span></div>
+      <div class="petina-subtag">Sua calculadora de preço e lucro</div>
+    </div>
+  </div>
+  <div style="display:flex; align-items:center; gap:16px;">
+    <span class="petina-topbar-right">Versão simplificada</span>
+    <div class="theme-toggle-wrap">
+      <button class="theme-toggle-btn active" id="theme-btn-dark" onclick="setTheme('dark')">🌙 Escuro</button>
+      <button class="theme-toggle-btn" id="theme-btn-light" onclick="setTheme('light')">☀️ Claro</button>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="logo-area">
+    <span class="logo-badge">ML</span>
+    <h1>Calculadora de <span>Precificação</span></h1>
+  </div>
+  <span class="header-tag">Mercado Livre · Clássico &amp; Premium</span>
+</header>
+
+<div class="layout">
+
+  <!-- INPUTS -->
+  <div class="panel">
+    <div class="panel-title">Dados do produto</div>
+
+    <div class="input-group">
+      <label>Custo por peça <span class="badge">obrigatório</span></label>
+      <div class="input-wrap">
+        <span class="input-prefix">R$</span>
+        <input type="number" id="custo" value="16" min="0" step="0.01">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Venda final do kit <span class="badge">obrigatório</span></label>
+      <div class="input-wrap">
+        <span class="input-prefix">R$</span>
+        <input type="number" id="venda" value="59.90" min="0" step="0.01">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Peso do kit embalado <span class="badge">para o frete</span></label>
+      <div class="input-wrap">
+        <input type="number" id="peso" value="0.4" min="0" step="0.01">
+        <span class="input-suffix">kg</span>
+      </div>
+    </div>
+
+<div class="input-group"><label for="quantidade">Peças no kit</label><div class="input-wrap"><input type="number" id="quantidade" value="2" min="1" step="1"></div></div>
+<div class="input-group"><label for="meta">Lucro desejado por peça</label><div class="input-wrap"><span class="input-prefix">R$</span><input type="number" id="meta" value="5" min="0" step="0.01"></div></div>    <hr class="divider-line">
+    <div class="subsection-label">Taxas e custos</div>
+
+    <div class="input-group">
+      <label>Imposto <span class="badge">base da mentoria</span></label>
+      <div class="input-wrap">
+        <input type="number" id="imposto" value="5" min="0" max="100" step="0.1">
+        <span class="input-suffix">%</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Embalagem</label>
+      <div class="input-wrap">
+        <span class="input-prefix">R$</span>
+        <input type="number" id="embalagem" value="1" min="0" step="0.01">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Reserva para devolução</label>
+      <div class="input-wrap">
+        <input type="number" id="devolucao" value="2" min="0" max="100" step="0.1">
+        <span class="input-suffix">%</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>ADS (publicidade)</label>
+      <div class="input-wrap">
+        <input type="number" id="ads" value="0" min="0" max="100" step="0.1">
+        <span class="input-suffix">%</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>
+        Frete
+        <span class="frete-toggle-wrap">
+          <button class="frete-toggle-btn active" id="btn-auto" onclick="setFreteMode('auto')">Auto</button>
+          <button class="frete-toggle-btn" id="btn-manual" onclick="setFreteMode('manual')">Manual</button>
+        </span>
+      </label>
+      <div id="frete-auto-info" class="frete-auto-badge">Automático pela tabela recebida (peso + preço)</div>
+      <div id="frete-manual-wrap" class="input-wrap" style="display:none">
+        <span class="input-prefix">R$</span>
+        <input type="number" id="frete-manual" value="0" min="0" step="0.01">
+      </div>
+    </div>
+
+    <hr class="divider-line">
+    <div class="subsection-label">Desconto visual</div>
+
+    <div class="slider-group">
+      <label>
+        Porcentagem de desconto
+        <span class="slider-val" id="desc-label">30%</span>
+      </label>
+      <input type="range" id="desconto" min="1" max="80" value="30">
+    </div>
+<details style="margin-top:20px"><summary style="cursor:pointer;color:var(--text-muted);font-size:12px">Ajustar comissões (opcional)</summary>
+<div class="input-group" style="margin-top:12px"><label for="comissao-cl">Clássico (%)</label><div class="input-wrap"><input type="number" id="comissao-cl" value="14" min="0" max="99.9" step="0.1"></div></div>
+<div class="input-group"><label for="comissao-pr">Premium (%)</label><div class="input-wrap"><input type="number" id="comissao-pr" value="19" min="0" max="99.9" step="0.1"></div></div>
+</details><p style="font-size:11px;line-height:1.6;color:var(--text-muted);margin-top:16px">Bases preservadas da mentoria: imposto 5%, embalagem R$1, reserva de devolução 2% e ADS 0%. São estimativas editáveis. Para MEI, não use 5% como imposto por venda automaticamente; ajuste conforme sua operação. O frete automático usa a tabela do arquivo enviado; confirme sua aplicação à sua conta. Em Flex ou envio próprio, use o custo manual total.</p>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-panel">
+
+<div id="erro" role="alert" style="color:var(--red);font-size:13px"></div><div class="visual-section" id="meta-card"><div class="result-big-title">Preço mínimo para sua meta</div><div class="visual-display"><span class="price-tag-new" id="minimo-cl">—</span><span style="color:var(--text-muted);font-size:12px">Clássico</span></div><p class="price-desc" id="minimo-pr"></p><p class="price-desc" id="meta-info"></p><button type="button" id="usar-minimo" style="margin-top:12px;padding:10px 15px;border:0;border-radius:8px;background:var(--yellow);color:#151515;font-weight:700;cursor:pointer">Usar preço mínimo</button></div>
+    <div id="frete-info"></div>
+
+    <!-- Clássico vs Premium -->
+    <div class="compare-grid">
+      <!-- Clássico -->
+      <div class="type-card classico">
+        <div class="type-header">
+          <span class="type-name">Clássico</span>
+          <span class="commission-badge">14% comissão</span>
+        </div>
+        <div class="breakdown" id="breakdown-cl"></div>
+      </div>
+      <!-- Premium -->
+      <div class="type-card premium">
+        <div class="type-header">
+          <span class="type-name">Premium</span>
+          <span class="commission-badge">19% comissão</span>
+        </div>
+        <div class="breakdown" id="breakdown-pr"></div>
+      </div>
+    </div>
+
+    <!-- Métricas principais -->
+    <div class="result-big">
+      <div class="result-big-title">Resultado final</div>
+      <div class="result-big-grid">
+        <div class="metric lucro-cl">
+          <div class="metric-label">Lucro · Clássico</div>
+          <div class="metric-val" id="lucro-cl-val">—</div>
+          <div class="metric-sub" id="lucro-cl-pct">—</div>
+        </div>
+        <div class="metric lucro-pr">
+          <div class="metric-label">Lucro · Premium</div>
+          <div class="metric-val" id="lucro-pr-val">—</div>
+          <div class="metric-sub" id="lucro-pr-pct">—</div>
+        </div>
+        <div class="metric markup">
+          <div class="metric-label">Markup · Clássico</div>
+          <div class="metric-val" id="markup-val">—</div>
+          <div class="metric-sub">preço ÷ despesas</div>
+        </div>
+        <div class="metric preco-visual">
+          <div class="metric-label">Preço "De" (desconto)</div>
+          <div class="metric-val" id="pvisual-val">—</div>
+          <div class="metric-sub" id="pvisual-sub">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preço visual -->
+    <div class="visual-section">
+      <div class="result-big-title">Simulação visual na plataforma</div>
+      <div class="visual-display">
+        <span class="price-tag-old" id="vis-old">—</span>
+        <span class="price-arrow">›</span>
+        <span class="price-tag-new" id="vis-new">—</span>
+        <span class="discount-pill" id="vis-pill">—</span>
+      </div>
+      <p class="price-desc" id="vis-desc"></p>
+    </div>
+
+  </div>
+</div>
+
+<footer><span>Frete: tabela recebida da mentoria (agosto/2026), sem atualização pela internet. Comissões e custos são estimativas até conferência na sua conta. Não soma uma segunda taxa de Mercado Pago. Valores arredondados apenas na exibição.</span></footer>
+
+<div class="petina-footer-bar">
+  <span class="doc-confidencial">Calculadora pessoal</span>
+  <span class="petina-footer-brand">Graziela Amorim</span>
+  <span class="petina-footer-dev">Tabela adaptada do arquivo fornecido</span>
+</div>
+
+<script>
+// ── TABELA DE FRETE (frete_mercadolivu.csv) ──────────────────────
+// Colunas de preço: [pMin, pMax]
+const PRICE_COLS = [
+  [0,     18.99],
+  [19,    48.99],
+  [49,    78.99],
+  [79,    99.99],
+  [100,  119.99],
+  [120,  149.99],
+  [150,  199.99],
+  [200, Infinity],
+];
+
+// Linhas: [kgMin, kgMax, ...valores por coluna de preço]
+const FRETE_TABLE = [
+  [0,    0.3,     5.65,  6.85,  8.15,  12.95,  14.95,  16.95,  19.05,  21.65],
+  [0.3,  0.5,     5.95,  6.95,  8.25,  13.85,  16.15,  18.15,  20.45,  23.25],
+  [0.5,  1,       6.05,  7.15,  8.45,  14.45,  16.85,  19.05,  21.35,  24.45],
+  [1,    1.5,     6.15,  7.35,  8.65,  14.75,  17.15,  19.45,  21.75,  25.45],
+  [1.5,  2,       6.25,  7.45,  8.75,  15.05,  17.65,  19.85,  22.25,  25.55],
+  [2,    3,       6.35,  8.65,  9.15,  16.45,  19.15,  21.65,  24.35,  27.05],
+  [3,    4,       6.45,  8.75,  9.75,  17.85,  20.75,  23.35,  26.35,  29.25],
+  [4,    5,       6.55,  8.85, 10.25,  19.75,  22.85,  26.05,  29.25,  32.45],
+  [5,    6,       6.65,  8.95, 10.35,  25.95,  29.15,  33.35,  36.45,  40.85],
+  [6,    7,       6.75,  9.05, 10.45,  27.55,  31.65,  36.75,  40.85,  45.25],
+  [7,    8,       6.85,  9.25, 10.55,  29.45,  34.35,  39.25,  44.15,  49.35],
+  [8,    9,       6.95,  9.35, 10.65,  30.25,  35.25,  40.35,  45.35,  50.75],
+  [9,   10,       7.05,  9.45, 10.85,  38.25,  45.05,  51.95,  58.75,  65.85],
+  [10,  11,       7.05,  9.65, 11.05,  41.65,  48.55,  55.45,  62.35,  69.35],
+  [11,  13,       7.15, 10.05, 11.45,  42.55,  49.75,  56.85,  63.85,  70.95],
+  [13,  15,       7.25, 10.25, 11.65,  45.55,  52.95,  60.55,  68.15,  75.65],
+  [15,  17,       7.35, 10.45, 11.85,  48.95,  56.55,  64.05,  71.35,  79.35],
+  [17,  20,       7.45, 10.65, 12.05,  55.15,  64.35,  73.55,  82.75,  91.95],
+  [20,  25,       7.65, 11.05, 12.25,  64.55,  75.75,  85.45,  96.25, 106.85],
+  [25,  30,       7.75, 11.25, 12.45,  66.45,  76.05,  86.25,  97.15, 107.85],
+  [30,  40,       7.85, 11.45, 12.65,  68.35,  79.65,  89.75, 100.05, 107.95],
+  [40,  50,       7.95, 11.65, 12.85,  70.95,  81.85,  92.85, 103.45, 111.65],
+  [50,  60,       8.05, 11.85, 13.05,  75.55,  87.25,  99.05, 110.25, 119.05],
+  [60,  70,       8.15, 12.05, 13.25,  80.95,  93.75, 105.95, 118.05, 127.45],
+  [70,  80,       8.25, 12.25, 13.45,  84.65,  97.95, 110.75, 123.35, 133.15],
+  [80,  90,       8.35, 12.45, 13.65,  94.05, 108.35, 122.95, 136.95, 147.85],
+  [90, 100,       8.45, 12.65, 13.85, 107.45, 124.85, 140.45, 156.45, 168.85],
+  [100,125,       8.55, 12.85, 14.05, 120.15, 138.95, 156.95, 174.85, 188.85],
+  [125,150,       8.65, 12.85, 14.25, 127.45, 147.05, 166.55, 185.55, 200.35],
+  [150,Infinity,  8.75, 12.85, 14.45, 167.05, 193.35, 218.45, 243.45, 262.85],
+];
+
+function lookupFrete(pv, kg) {
+  if (pv <= 0 || kg <= 0) return null;
+  const colIdx = PRICE_COLS.findIndex((c,i) => pv >= c[0] && pv < (PRICE_COLS[i+1]?.[0] ?? Infinity));
+  if (colIdx === -1) return null;
+  const weightRow = FRETE_TABLE.find(r => kg > r[0] && kg <= r[1]);
+  if (!weightRow) return null;
+  return weightRow[2 + colIdx]; // +2 para pular kgMin e kgMax
+}
+
+function taxaFixa(pv, kg) {
+  // Para preços < 79, o valor da tabela é a taxa fixa (varia por peso e faixa de preço)
+  if (pv <= 0 || kg <= 0) return 0;
+  return lookupFrete(pv, kg) ?? 0;
+}
+
+
+// ── FORMATAÇÃO ──────────────────────────────────────────────────
+const brl = v => new Intl.NumberFormat('pt-BR', {style:'currency',currency:'BRL'}).format(v);
+const pct = v => (v * 100).toFixed(2).replace('.', ',') + '%';
+
+function row(label, val, cls = '') {
+  const fmtVal = typeof val === 'number' ? brl(val) : val;
+  return `<div class="brow ${cls}">
+    <span class="blabel">${label}</span>
+    <span class="bval">${fmtVal}</span>
+  </div>`;
+}
+
+// ── TEMA (claro/escuro) ──────────────────────────────────────────
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('theme-btn-dark').classList.toggle('active', theme === 'dark');
+  document.getElementById('theme-btn-light').classList.toggle('active', theme === 'light');
+}
+
+// ── MODO FRETE ───────────────────────────────────────────────────
+let freteMode = 'auto';
+
+function setFreteMode(mode) {
+  freteMode = mode;
+  document.getElementById('btn-auto').classList.toggle('active', mode === 'auto');
+  document.getElementById('btn-manual').classList.toggle('active', mode === 'manual');
+  document.getElementById('frete-auto-info').style.display = mode === 'auto' ? 'block' : 'none';
+  document.getElementById('frete-manual-wrap').style.display = mode === 'manual' ? 'flex' : 'none';
+  calc();
+}
+
+
+function calc() {
+  const invalid=Array.from(document.querySelectorAll('input[type="number"]')).some(e=>e.value===''||!e.checkValidity());
+  const erro=document.getElementById('erro');
+  if(invalid){erro.textContent='Preencha valores válidos nos campos numéricos.';document.querySelector('.results-panel').classList.add('invalid');return;}
+  const Q=Number(document.getElementById('quantidade').value), meta=Number(document.getElementById('meta').value);
+  if(Q<1||!Number.isInteger(Q)){erro.textContent='A quantidade de peças deve ser um inteiro maior que zero.';document.querySelector('.results-panel').classList.add('invalid');return;}
+  erro.textContent='';document.querySelector('.results-panel').classList.remove('invalid');
+  const Pv     = parseFloat(document.getElementById('venda').value) || 0;
+  const C      = (parseFloat(document.getElementById('custo').value) || 0) * Q;
+  const kg     = parseFloat(document.getElementById('peso').value) || 0;
+  const i      = (parseFloat(document.getElementById('imposto').value) || 0) / 100;
+  const E      = parseFloat(document.getElementById('embalagem').value) || 0;
+  const d      = (parseFloat(document.getElementById('devolucao').value) || 0) / 100;
+  const A      = Pv * ((parseFloat(document.getElementById('ads').value) || 0) / 100);
+  const delta  = (parseFloat(document.getElementById('desconto').value) || 30) / 100;
+
+  document.getElementById('desc-label').textContent = Math.round(delta * 100) + '%';
+
+  // ─ Taxas fixas ML (some quando preço >= R$ 79, valor varia por peso e faixa)
+  const cCl=Number(document.getElementById('comissao-cl').value)/100, cPr=Number(document.getElementById('comissao-pr').value)/100;
+  const adPct=Number(document.getElementById('ads').value)/100;
+  if(cCl+i+d+adPct>=1||cPr+i+d+adPct>=1){erro.textContent='A soma dos percentuais deve ser menor que 100%.';document.querySelector('.results-panel').classList.add('invalid');return;}
+  if(Pv<=0||kg<=0){erro.textContent='Preço e peso devem ser maiores que zero.';document.querySelector('.results-panel').classList.add('invalid');return;}
+  document.querySelector('.classico .commission-badge').textContent=pct(cCl)+' comissão';
+  document.querySelector('.premium .commission-badge').textContent=pct(cPr)+' comissão';
+  const manual=Number(document.getElementById('frete-manual').value)||0;
+  function minimum(fee){let best=Infinity;const factor=1-fee-i-d-adPct;
+    const ranges=freteMode==='manual'?[[0.01,Infinity]]:PRICE_COLS.map((r,j)=>[Math.max(.01,r[0]),PRICE_COLS[j+1]?.[0]??Infinity]);
+    for(const[lo,hi]of ranges){const log=freteMode==='manual'?manual:lookupFrete(lo,kg);if(log===null)continue;
+      const cents=Math.max(Math.ceil(lo*100),Math.ceil((C+E+Q*meta+log)/factor*100-1e-8));const price=cents/100;if(price<hi)best=Math.min(best,price);
+    }return best;}
+  window.precoMinimo=minimum(cCl);
+  document.getElementById('minimo-cl').textContent=brl(window.precoMinimo);
+  document.getElementById('minimo-pr').textContent='Premium: '+brl(minimum(cPr));
+  document.getElementById('meta-info').textContent=Q+' peças × '+brl(meta)+' de lucro = '+brl(Q*meta)+' por kit, com as despesas preenchidas.';
+  const Tf = freteMode === 'auto' ? (Pv < 79 ? taxaFixa(Pv, kg) : 0) : 0;
+
+  // ─ Frete
+  const freteEl = document.getElementById('frete-info');
+  let freteVal = 0;
+
+  if (freteMode === 'manual') {
+    freteVal = parseFloat(document.getElementById('frete-manual').value) || 0;
+    freteEl.innerHTML = `<div class="frete-badge"><span class="dot" style="background:var(--orange)"></span>Frete manual · <strong style="color:var(--orange)">R$ ${freteVal.toFixed(2).replace('.',',')}</strong> (valor inserido pelo usuário)</div>`;
+  } else {
+    if (Pv < 79) {
+      // Abaixo de R$79 → taxa fixa da tabela (por peso + faixa de preço), frete não é cobrado
+      freteVal = 0;
+      if (Pv > 0 && kg > 0) {
+        const tfVal = taxaFixa(Pv, kg);
+        const pLabel = PRICE_COLS.find(c => Pv >= c[0] && Pv <= c[1]);
+        const pLabelStr = pLabel ? `R$ ${pLabel[0]}–${pLabel[1]}` : '—';
+        freteEl.innerHTML = `<div class="frete-badge"><span class="dot" style="background:var(--orange)"></span>Preço abaixo de R$ 79,00 · Custo logístico de referência (${pLabelStr} · ${kg} kg) → <strong style="color:var(--orange)">R$ ${tfVal.toFixed(2).replace('.',',')}</strong></div>`;
+      } else {
+        freteEl.innerHTML = '';
+      }
+    } else {
+      // R$79 ou acima → frete da tabela, sem taxa fixa
+      const F = lookupFrete(Pv, kg);
+      freteVal = F !== null ? F : 0;
+      if (Pv <= 0 || kg <= 0) {
+        freteEl.innerHTML = '';
+      } else if (F === null) {
+        freteEl.innerHTML = `<div class="no-frete">✕ Combinação de preço/peso sem correspondência na tabela de frete. Verifique os valores.</div>`;
+      } else {
+        const pLabel = PRICE_COLS.find(c => Pv >= c[0] && Pv <= c[1]);
+        const pLabelStr = pLabel ? `R$ ${pLabel[0]}–${pLabel[1] === Infinity ? '200+' : pLabel[1]}` : '—';
+        freteEl.innerHTML = `<div class="frete-badge"><span class="dot"></span>Frete da tabela · Faixa <strong>${pLabelStr}</strong> · ${kg} kg → <strong>R$ ${freteVal.toFixed(2).replace('.',',')}</strong> · <span style="color:var(--green)">Sem tarifa fixa adicional</span></div>`;
+      }
+    }
+  }
+
+  // ─ Componentes comuns
+  const impostoVal = Pv * i;
+  const devolucaoVal = Pv * d;
+
+  // ─ CLÁSSICO
+  const comCl   = Pv * cCl;
+  const despCl  = comCl + Tf + freteVal + impostoVal + E + devolucaoVal + A + C;
+  const lucCl   = Pv - despCl;
+  const margCl  = Pv > 0 ? lucCl / Pv : 0;
+  const repCl   = Pv * (1 - cCl) - Tf - freteVal;
+  const markup  = despCl > 0 ? Pv / despCl : 0;
+
+  // ─ PREMIUM
+  const comPr   = Pv * cPr;
+  const despPr  = comPr + Tf + freteVal + impostoVal + E + devolucaoVal + A + C;
+  const lucPr   = Pv - despPr;
+  const margPr  = Pv > 0 ? lucPr / Pv : 0;
+  const repPr   = Pv * (1 - cPr) - Tf - freteVal;
+
+  // ─ Preço visual
+  const pVisual = delta < 1 ? Pv / (1 - delta) : 0;
+
+  // ─ Render breakdowns
+  function renderBreakdown(id, comVal, repasse) {
+    const luc = Pv - (comVal + Tf + freteVal + impostoVal + E + devolucaoVal + A + C);
+    const isNeg = luc < 0;
+    const taxaFixaRow = Tf > 0
+      ? `<div class="brow negative"><span class="blabel">Custo logístico abaixo de R$79</span><span class="bval">− ${brl(Tf)}</span></div>`
+      : `<div class="brow"><span class="blabel" style="color:var(--text-dim);font-style:italic">Custo logístico abaixo de R$79</span><span class="bval" style="color:var(--text-dim);font-size:11px">incluída no custo manual ou não cobrada</span></div>`;
+    const freteRow = freteMode === 'manual' || Pv >= 79
+      ? row('Frete', freteVal, 'negative')
+      : `<div class="brow"><span class="blabel" style="color:var(--text-dim);font-style:italic">Frete</span><span class="bval" style="color:var(--text-dim);font-size:11px">não cobrado (< R$ 79)</span></div>`;
+    document.getElementById(id).innerHTML = `
+      ${row('Comissão ML', comVal, 'negative')}
+      ${taxaFixaRow}
+      ${freteRow}
+      ${row('Imposto', impostoVal, 'negative')}
+      ${row('Embalagem', E, 'negative')}
+      ${row('Devolução', devolucaoVal, 'negative')}
+      ${row('ADS', A, 'negative')}
+      ${row('Custo produto', C, 'negative')}
+      <div class="brow-sep"></div>
+      ${row('Total despesas', comVal + Tf + freteVal + impostoVal + E + devolucaoVal + A + C, 'negative total')}
+      ${row('Repasse recebido', repasse, 'positive')}
+      <div class="brow-sep"></div>
+      ${row('Lucro líquido', luc, isNeg ? 'negative total' : 'positive total')}
+    `;
+  }
+
+  renderBreakdown('breakdown-cl', comCl, repCl);
+  renderBreakdown('breakdown-pr', comPr, repPr);
+
+  // ─ Métricas principais
+  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+  setEl('lucro-cl-val', brl(lucCl));
+  setEl('lucro-cl-pct', `${brl(lucCl/Q)} por peça · margem ${pct(margCl)}`);
+  setEl('lucro-pr-val', brl(lucPr));
+  setEl('lucro-pr-pct', `${brl(lucPr/Q)} por peça · margem ${pct(margPr)}`);
+  setEl('markup-val', markup.toFixed(3).replace('.', ','));
+  setEl('pvisual-val', brl(pVisual));
+  setEl('pvisual-sub', `${Math.round(delta*100)}% de desconto`);
+
+  // Cor do lucro Clássico
+  document.querySelector('.metric.lucro-cl .metric-val').style.color = lucCl >= 0 ? 'var(--green)' : 'var(--red)';
+  document.querySelector('.metric.lucro-pr .metric-val').style.color = lucPr >= 0 ? 'var(--yellow)' : 'var(--red)';
+
+  // ─ Visual desconto
+  setEl('vis-old', brl(pVisual));
+  setEl('vis-new', brl(Pv));
+  setEl('vis-pill', `${Math.round(delta*100)}% OFF`);
+  setEl('vis-desc', `De ${brl(pVisual)} por ${brl(Pv)} · Economia de ${brl(pVisual - Pv)}`);
+}
+
+document.getElementById('usar-minimo').addEventListener('click',()=>{if(Number.isFinite(window.precoMinimo)){document.getElementById('venda').value=window.precoMinimo.toFixed(2);calc();}});
+// ── EVENTOS ──────────────────────────────────────────────────────
+document.querySelectorAll('input').forEach(el => el.addEventListener('input', calc));
+calc();
+</script>
+</body>
+</html>
